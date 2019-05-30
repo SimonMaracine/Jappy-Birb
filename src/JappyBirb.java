@@ -9,38 +9,52 @@ public class JappyBirb extends BasicGame {
     static int HEIGHT = 700;
     static final String TITLE = "Jappy Birb";
     private Random rand = new Random();
-    private Timer timer = new Timer();
+    private Timer timer;
 
     private Birb bird;
-    private ArrayList<Pipe> pipes = new ArrayList<>();
+    private ArrayList<Pipe> pipes;
+    private Ground ground;
+    private Score score;
 
     private JappyBirb(String title) {
         super(title);
     }
 
     public void init(GameContainer gc) {
+        timer = new Timer();
         bird = new Birb();
-        pipes.add(new Pipe(650, rand.nextInt(HEIGHT - 245) + 40));
+        pipes = new ArrayList<>();
+        pipes.add(new Pipe(650, rand.nextInt(HEIGHT - 345) + 40));
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override public void run() {
-                System.out.println(0);
-                pipes.add(new Pipe(650, rand.nextInt(HEIGHT - 245) + 40));
+                pipes.add(new Pipe(650, rand.nextInt(HEIGHT - 345) + 40));
             }
         }, 3000, 3000);
+        ground = new Ground();
+        score = new Score();
     }
 
     public void render(GameContainer gc, Graphics g) {
-        bird.render(g);
+        g.setBackground(new Color(160, 160, 255));
+        ArrayList<Pipe> pipes = Pipe.cloneList(this.pipes);
         for (Pipe pipe : pipes) {
             pipe.render(g);
         }
+        ground.render(g);
+        bird.render(g);
+        score.render(g);
     }
 
     public void update(GameContainer gc, int dt) {
         Input input = gc.getInput();
         bird.update(dt);
-        if (input.isKeyPressed(Input.KEY_SPACE)) {
+        if (bird.collideGround(ground)) {
+            restart(gc);
+        }
+        if (input.isKeyPressed(Input.KEY_SPACE) || input.isKeyPressed(Input.KEY_UP)) {
             bird.jump();
+        } else if (input.isKeyPressed(Input.KEY_R)) {
+            restart(gc);
         } else if (input.isKeyPressed(Input.KEY_ESCAPE)) {
             gc.exit();
         }
@@ -50,8 +64,28 @@ public class JappyBirb extends BasicGame {
             if (pipes.get(i).offScreen()) {
                 pipes.remove(i);
             }
+            if (bird.collidePipe(pipes.get(i))) {
+//                System.out.println("hit");
+                pipes.get(i).color = new Color(255, 0, 0);
+            } else {
+                pipes.get(i).color = new Color(0, 210, 0);
+            }
+            if (bird.scoreUp(pipes.get(i))) {
+                score.score++;
+//                System.out.println("SCORE");
+            }
         }
-        System.out.println(pipes.size());
+//        System.out.println(pipes.size());
+    }
+
+    private void restart(GameContainer gc) {
+        try {
+            gc.reinit();
+        } catch (SlickException e) {
+            e.printStackTrace();
+        }
+        timer.cancel();
+        pipes.clear();
     }
 
     public static void main(String[] args) {
