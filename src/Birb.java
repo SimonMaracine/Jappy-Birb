@@ -1,14 +1,19 @@
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 
+import static org.joml.Math.sin;
+
 class Birb {
     float x = 100;
-    float y = JappyBirb.HEIGHT / 2 - 40;
+    float y = JappyBirb.HEIGHT / 2.0f - 40;
     int width = 45;
     float vel = 0;
-    float acc = 0.35f;
+    float acc = 0.4f;
     boolean canJump = true;
     float maxVel = 6.8f;
+    boolean isDead = false;
+    boolean floating = true;
+    float floatCount = 0;
 
     void render(Graphics g) {
         g.setColor(Color.yellow);
@@ -23,7 +28,7 @@ class Birb {
         if (vel < maxVel) {
             vel += acc;
         }
-        vel *= 0.97;
+        vel *= 0.96f;
         y += vel;
 
         if (y < 0) {
@@ -41,7 +46,7 @@ class Birb {
 
     void jump() {
         if (canJump) {
-            vel = -9;
+            vel = -11;
         }
     }
 
@@ -71,5 +76,10 @@ class Birb {
         } else {
             return false;
         }
+    }
+
+    void fly() {
+        y = JappyBirb.HEIGHT / 2.0f - 40 + (float) sin(floatCount) * 20;
+        floatCount += 0.1f;
     }
 }
