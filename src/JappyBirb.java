@@ -112,6 +112,7 @@ class JappyBirb extends BasicGame {
         }
         timer.cancel();
         pipes.clear();
+        timerStarted = false;
     }
 
     public static void main(String[] args) {
