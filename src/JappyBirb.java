@@ -67,8 +67,10 @@ public class JappyBirb extends BasicGame {
             if (bird.collidePipe(pipes.get(i))) {
 //                System.out.println("hit");
                 pipes.get(i).color = new Color(255, 0, 0);
+                pipes.get(i).capColor = new Color(235, 0, 0);
             } else {
                 pipes.get(i).color = new Color(0, 210, 0);
+                pipes.get(i).capColor = new Color(0, 190, 0);
             }
             if (bird.scoreUp(pipes.get(i))) {
                 score.score++;
@@ -97,6 +99,9 @@ public class JappyBirb extends BasicGame {
             appgc.setDisplayMode(WIDTH, HEIGHT, false);
             appgc.setTitle(TITLE);
             appgc.setTargetFrameRate(60);
+//            appgc.setIcon();
+            appgc.setVSync(false);
+            appgc.setAlwaysRender(true);
             appgc.start();
         } catch (SlickException e) {
             e.printStackTrace();

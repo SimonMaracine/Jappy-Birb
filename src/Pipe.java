@@ -10,6 +10,7 @@ class Pipe {
     int startGap;
     int gapWidth = 165;
     Color color = new Color(0, 210, 0);
+    Color capColor = new Color(0, 190, 0);
 
     Pipe(float x, int startGap) {
         this.x = x;
@@ -18,8 +19,11 @@ class Pipe {
 
     void render(Graphics g) {
         g.setColor(color);
-        g.fillRect(x, 0, width, startGap);
-        g.fillRect(x, startGap + gapWidth, width, JappyBirb.HEIGHT - startGap - gapWidth - 100);
+        g.fillRect(x, 0, width, startGap);  // top pipe
+        g.fillRect(x, startGap + gapWidth, width, JappyBirb.HEIGHT - startGap - gapWidth - 100);  // bottom pipe
+        g.setColor(capColor);
+        g.fillRect(x - 4, startGap - 35, width + 8, 35);
+        g.fillRect(x - 4, startGap + gapWidth, width + 8, 35);
     }
 
     void update(int dt) {

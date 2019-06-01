@@ -8,7 +8,7 @@ class Birb {
     float vel = 0;
     float acc = 0.35f;
     boolean canJump = true;
-    float maxVel = 6.5f;
+    float maxVel = 6.8f;
 
     void render(Graphics g) {
         g.setColor(Color.yellow);
